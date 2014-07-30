@@ -1,0 +1,39 @@
+
+<?php
+$con=mysqli_connect("example.com","peter","abc123");
+// Check connection
+if (mysqli_connect_errno()) {
+  echo "Failed to connect to MySQL: " . mysqli_connect_error();
+}
+
+// Create database
+$sql="CREATE DATABASE my_db";
+if (mysqli_query($con,$sql)) {
+  echo "Database my_db created successfully";
+} else {
+  echo "Error creating database: " . mysqli_error($con);
+}
+foreach($oauth as $key => $value){
+    
+    $con=mysqli_connect("example.com","peter","abc123","my_db");
+// Check connection
+if (mysqli_connect_errno()) {
+  echo "Failed to connect to MySQL: " . mysqli_connect_error();
+}
+
+// Create table
+$sql="CREATE TABLE Results(CreatedAt CHAR(30),id INT,id_str CHAR(18),"
+        . "text CHAR(150),source CHAR(100),truncated BOOL, in_reply_to_status_id NULL,"
+        . "in_reply_to_status_id_str NULL,in_reply_to_user_id NULL,in_reply_to_user_id_str NULL,"
+        . "in_reply_to_screen_name NULL, user, geo NULL, coordinates NULL, place NULL,"
+        . "contributors NULL, retweet_count INT, favorite_count INT, entities, favorited BOOL,"
+        . "retweeted BOOL, possibly_sensitive BOOL, lang CHAR(10)";
+
+// Execute query
+if (mysqli_query($con,$sql)) {
+  echo "Table results created successfully";
+} else {
+  echo "Error creating table: " . mysqli_error($con);
+}
+}
+?>
