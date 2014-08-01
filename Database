@@ -71,11 +71,35 @@ Public function insertTweets($tweets){
 }
 
 
-?>      
+           
 
 
-     
-
-            
-        
-
+public function search($query){
+    try{
+    $x = $this->db->prepare($query);
+    $x->execute();   
+}   catch(PDOException $e){
+    die('Query failed' . $e->getMessage());
+}
+echo'<table border=1>';
+$heading = true;
+while(($row=$x->fetch(PDO::FETCH_ASSOC))){
+    echo'<tr>';
+    
+    if($heading){
+        $keys=array_keys($row);
+        foreach($keys as $k){
+            echo'<th>'. $k . '</th>';
+                    
+        }
+        echo'</th><tr>';
+        $heading = false;
+    }
+    foreach($row as $r=>$v){
+        echo'<td>'. $v. '</td>';
+    }
+    echo'</tr>';
+}
+echo'</table>';
+}
+}
