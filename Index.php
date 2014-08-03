@@ -9,7 +9,9 @@
  ================================================-->*/
 // requires library 
        require_once('TwitterAPIExchange.php');
-             
+        
+include 'functions.php';
+include('database.php');
        //sets authentication data
        $settings = array(
     'oauth_access_token' => "259392968-J19sEoQuhIJDa5EdmPzJQdxtM4wQgmWAUhORLsxf",
@@ -44,55 +46,32 @@ echo'<h3>URL for the Query</h3>';
 echo'<a href='.$url.'?q='.$query.'>' .$url.'?q='.$query.'</a>';
 echo'<hr>';
 
+ 
+
 
 //prints out the results in json format
-$tweets = json_decode($response);
-var_dump($tweets);
-//var_dump(json_decode($response));
-
-//Datebase
-
-$con=mysqli_connect("example.com","peter","abc123");
-// Check connection
-if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-}
-
-// Create database
-$sql="CREATE DATABASE my_db";
-if (mysqli_query($con,$sql)) {
-  echo "Database my_db created successfully";
-} else {
-  echo "Error creating database: " . mysqli_error($con);
-  
-  
-  
-// Table
-  
-  $con=mysqli_connect("example.com","peter","abc123","my_db");
-// Check connection
-if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-}
-
-// Create table
-$sql="CREATE TABLE Persons(FirstName CHAR(30),LastName CHAR(30),Age INT)";
-
-// Execute query
-if (mysqli_query($con,$sql)) {
-  echo "Table persons created successfully";
-} else {
-  echo "Error creating table: " . mysqli_error($con);
-}
-
-//Primary Keys
-$sql = "CREATE TABLE Persons 
-(
-PID INT NOT NULL AUTO_INCREMENT, 
-PRIMARY KEY(PID),
-FirstName CHAR(15),
-LastName CHAR(15),
-Age INT
-)";
-
-?>
+$tweets = json_decode($response)->statuses;
+$objects=tweets2array($tweets);
+echo 'Total tweets '.count($objects);
+$database = new Database('twitter');
+$table = 'tweets';
+$database->insertTweets($objects);
+//$database->close();
+//
+//$query=$keyword;
+//$dbname="twitter";
+//$database=new Database($dbname);
+$querey = "SELECT * from tweets limit 10";
+$database->search($querey);
+$database->close();
+//var_dump(json_decode($response));=0;
+//$status=$tweets->statuses;
+//foreach ($status as $key => $value){
+//    foreach($value as $k => $v){
+//        if($v != 'entities')
+//            var_dump($v);
+//    }
+//}
+//var_dump();
+//$user = $status[0]->user;
+//echo $user->name;
